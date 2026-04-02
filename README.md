@@ -33,6 +33,16 @@
 ./ut.sh 0 1 test_suite
 ```
 
+### 多进程测试
+
+```bash
+# Rank 0 (server)
+./build/test_multi 0 2 mlx5_0 127.0.0.1
+
+# Rank 1 (client, 另一个终端)
+./build/test_multi 1 2 mlx5_0 127.0.0.1 127.0.0.1
+```
+
 ### 环境变量
 
 | 变量 | 说明 | 默认值 |
@@ -44,8 +54,8 @@
 - `rank`: 当前进程 rank
 - `num_ranks`: 总进程数
 - `ib_device`: IB 设备名 (如 `mlx5_0`, `mlx5_1`)
-
-可通过 `ibdev_to_netdev` 或 `ls /sys/class/infiniband/` 查看可用设备。
+- `my_ip`: 本机 IP 地址
+- `peer_ips`: 对端 IP 地址列表 (供 rank > 0 使用)
 
 ## 测试用例
 
@@ -58,11 +68,7 @@
 | 5 | IPC Handle | `get_ipc_handle()` |
 | 6 | InfiniBand 同步 | `sync_ib()` |
 | 7 | RoCE 同步 | `sync_roce()` |
-| 8 | QP 重建 | `update_local_qpns()` |
-| 9 | Buffer 大小计算 | `get_ep_buffer_size_hint()` |
-| 10 | NVLink IPC | `sync_nvlink_ipc_handles()` |
-| 11 | Fallback 模式 | IBGDA 禁用时行为 |
-| 12 | 压力测试 | 重复操作 |
+| 8 | NVLink IPC | `sync_nvlink_ipc_handles()` |
 
 ## 项目结构
 
@@ -71,6 +77,7 @@ ep-demo/
 ├── CMakeLists.txt
 ├── build.sh              # 编译脚本
 ├── ut.sh                 # 运行脚本
+├── README.md
 ├── include/
 │   ├── ep_buffer.h
 │   ├── ep_configs.cuh
@@ -81,19 +88,21 @@ ep-demo/
 │   └── ep_ibgda/mlx5gda.cpp
 └── test/
     ├── test_init.cpp     # 简单初始化测试
-    └── test_suite.cpp    # 完整测试套件
+    ├── test_suite.cpp    # 完整测试套件
+    └── test_multi.cpp   # 多进程测试
 ```
 
 ## 示例输出
 
 ```
-=== EP Demo Test Suite ===
-Rank: 0/1
+=== EP Multi-Process Test ===
+Rank: 0/2
 Device: mlx5_0
+My IP: 127.0.0.1
 Buffer size: 256 MiB
 
 ============================================================
-Test 1: Basic Initialization
+Test 1: Basic Initialization [Rank 0]
 ============================================================
 IBGDA disabled: no
 Is RoCE: no
@@ -101,6 +110,5 @@ Use fast path: yes
 PASSED!
 ...
 ============================================================
-ALL TESTS PASSED!
+ALL TESTS PASSED [Rank 0]!
 ```
-# ep-demo

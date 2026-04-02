@@ -19,7 +19,12 @@ add_executable(test_suite test/test_suite.cpp
     src/ep_ibgda/mlx5gda.cpp
 )
 
-foreach(target test_init test_suite)
+add_executable(test_multi test/test_multi.cpp
+    src/ep_buffer.cpp
+    src/ep_ibgda/mlx5gda.cpp
+)
+
+foreach(target test_init test_suite test_multi)
     target_link_libraries(${target} PRIVATE
         CUDA::cuda_driver
         CUDA::cudart
