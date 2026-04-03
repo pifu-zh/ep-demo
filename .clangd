@@ -1,0 +1,6 @@
+CompileFlags:
+    CompilationDatabase: /home/yang.zhuo/src/ep-demo/build
+    Add:
+        - -I/usr/include/infiniband
+        - -I/usr/include
+        - -isystem/usr/local/cuda/include

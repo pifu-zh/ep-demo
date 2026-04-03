@@ -11,7 +11,7 @@ if [ ! -d "$BUILD_DIR" ]; then
 fi
 
 cd "$BUILD_DIR"
-cmake ..
+cmake .. -DCMAKE_CUDA_COMPILER=/usr/local/cuda-12.6/bin/nvcc -DCMAKE_CUDA_ARCHITECTURES=80 -DCMAKE_CUDA_IMAKE_TARGET_ARCHS=80
 make -j$(nproc)
 
 echo ""

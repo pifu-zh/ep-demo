@@ -1,0 +1,9 @@
+---
+# 使用制表符进行缩进
+UseTab: Always
+# 缩进宽度（Tab占据的空格数）
+IndentWidth: 4
+# 制表符的宽度
+TabWidth: 4
+# 如果需要，可以将 TabWidth 设置为其他值，如 8
+---
